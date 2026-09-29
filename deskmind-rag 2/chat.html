@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>DeskMind Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="shared.css">
+<style>
+body{display:flex;justify-content:center;padding:18px}
+.app{width:100%;max-width:860px;height:calc(100vh - 36px);background:#fff;border-radius:32px;box-shadow:0 24px 60px rgba(60,60,140,.15);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--bd)}
+.hd{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--bd)}
+.hd .av{width:52px;height:52px;border-radius:18px;background:var(--lav);display:grid;place-items:center}
+.hd h2{font-size:19px;font-weight:600}.hd small{color:var(--mu);font-size:13px}.hd .sp{flex:1}.hd a{font-size:13px;color:var(--ac);text-decoration:none;font-weight:500}
+.kb{display:flex;gap:8px;padding:10px 22px;background:var(--card);font-size:12.5px;color:var(--mu);flex-wrap:wrap}.kb b{color:var(--tx)}
+#log{flex:1;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:14px}
+.m{max-width:80%;padding:12px 16px;border-radius:22px;font-size:15px;line-height:1.55;animation:in .25s}
+.m.u{align-self:flex-end;background:linear-gradient(90deg,#4285f4,#7c6cf0);color:#fff;border-bottom-right-radius:6px}
+.m.b{align-self:flex-start;background:var(--card);border-bottom-left-radius:6px}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.tk{align-self:flex-start;font-size:11.5px;color:var(--mu);margin:-8px 0 0 6px}.tk b{color:#1a8f5a}
+.car{flex-shrink:0;display:flex;gap:12px;overflow-x:auto;padding:4px 22px 8px;margin:0 -22px;scroll-snap-type:x mandatory;scroll-padding-left:22px;align-self:stretch}
+.cd{cursor:pointer;transition:.15s;flex:0 0 200px;scroll-snap-align:start;background:#fff;border:1px solid var(--bd);border-radius:26px;padding:16px;text-align:center;box-shadow:0 8px 20px rgba(60,60,140,.07)}
+.cd .im{width:88px;height:88px;border-radius:50%;background:var(--lav);margin:0 auto 10px;overflow:hidden;display:grid;place-items:center;font-size:40px}.cd img{width:100%;height:100%;object-fit:cover}
+.cd h4{font-size:15px;font-weight:600}.cd .d{font-size:12.5px;color:var(--ac);font-weight:500}.cd .x{font-size:12px;color:var(--mu);margin:6px 0 10px;line-height:1.5}
+.cd button{width:100%;border:0;border-radius:99px;padding:10px;font:500 13px Poppins;color:#fff;background:linear-gradient(90deg,#4285f4,#7c6cf0);cursor:pointer}
+.ch{display:flex;gap:8px;padding:0 22px 10px;flex-wrap:nowrap;overflow-x:auto}.ch button{flex:0 0 auto;border:1px solid var(--bd);background:#fff;border-radius:99px;padding:8px 14px;font:500 13px Poppins;color:#3b3d8f;cursor:pointer;opacity:0;transform:translateY(6px);animation:chipIn .5s ease forwards}.ch button:hover{background:var(--lav)}@keyframes chipIn{to{opacity:1;transform:translateY(0)}}
+.hd h2{color:#0f1222}.hd small{color:#6b7280}
+form{display:flex;gap:10px;padding:14px 22px 20px;border-top:1px solid var(--bd)}
+input{flex:1;border:1px solid var(--bd);background:var(--card);border-radius:99px;padding:14px 20px;font:400 15px Poppins;outline:0;min-width:0}
+form button{border:0;border-radius:99px;padding:0 26px;font:500 15px Poppins;color:#fff;background:linear-gradient(90deg,#4285f4,#7c6cf0);cursor:pointer}
+.dots i{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:#9aa0c0;animation:bl 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes bl{50%{opacity:.25}}
+.ok{background:#e8f8ef;border:1px solid #bfe9d0;color:#125c38}.ok b{display:block;font-size:15px;margin-bottom:4px}
+#ks,#mc,#pp,#st{position:fixed;inset:0;background:rgba(15,18,34,.4);display:none;align-items:center;justify-content:center;z-index:10;padding:16px}#ks.on,#mc.on,#pp.on,#st.on{display:flex}#ks .sc,#mc .sc,#pp .sc,#st .sc{border-radius:32px}#sh{position:fixed;inset:0;background:rgba(15,18,34,.4);display:none;align-items:flex-end;justify-content:center;z-index:9}#sh.on{display:flex}
+.sc{background:#fff;width:min(520px,100%);border-radius:32px 32px 0 0;padding:26px;animation:up .25s}@keyframes up{from{transform:translateY(60px);opacity:0}}
+.sc h3{font-size:20px;margin-bottom:4px}.sc p{font-size:13px;color:var(--mu);margin-bottom:14px}.sc label{font-size:12px;font-weight:600;color:var(--mu);display:block;margin:12px 0 6px}
+.cl{display:flex;gap:8px;flex-wrap:wrap}.cl button{border:1px solid var(--bd);background:#fff;border-radius:16px;padding:9px 14px;font:500 13px Poppins;cursor:pointer}.cl button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.sc input{width:100%;flex:none;border-radius:16px;padding:12px 16px}.sc .go{width:100%;margin-top:18px;border:0;border-radius:99px;padding:14px;font:500 15px Poppins;color:#fff;background:linear-gradient(90deg,#4285f4,#7c6cf0);cursor:pointer}.sc .go:disabled{opacity:.4}
+.pr{display:flex;align-items:center;gap:12px}.pr img{width:48px;height:48px;border-radius:50%;object-fit:cover;background:var(--lav)}.pr b{font-size:14px}.pr small{display:block;color:var(--mu);font-size:12px}.pr .sp{flex:1}.pr button,.bulk{border:1px solid var(--bd);background:#fff;border-radius:99px;padding:7px 12px;font:500 12px Poppins;cursor:pointer;color:#3b3d8f}.bulk{padding:10px 16px;margin-bottom:12px}#pl{display:flex;flex-direction:column;gap:12px;max-height:55vh;overflow:auto}.menu a{display:block;padding:15px 18px;border-radius:18px;background:var(--card);margin-bottom:10px;font-weight:500;font-size:15px;color:#3b3d8f;text-decoration:none;cursor:pointer;user-select:none}.menu a:hover{background:var(--lav)}#log>*{flex-shrink:0}.cd:hover{transform:translateY(-3px)}.cd.sel{border-color:var(--ac);box-shadow:0 0 0 3px #d9dcff}
+.tkc{align-self:flex-start;width:min(340px,100%)}.tkc canvas{width:100%;display:block;border-radius:22px;box-shadow:0 12px 30px rgba(60,60,140,.2)}
+.bt{display:flex;gap:8px;margin-top:10px}.bt button{flex:1;border:1px solid var(--bd);background:#fff;border-radius:99px;padding:10px;font:500 13px Poppins;color:#3b3d8f;cursor:pointer}
+.sum{background:var(--card);border-radius:20px;padding:14px 16px;font-size:14px}.sum div{display:flex;justify-content:space-between;padding:4px 0}.sum span{color:var(--mu)}.sum .t{border-top:1px dashed #cfd3ea;margin-top:6px;padding-top:8px;font-weight:600}
+.bk{display:block;text-align:center;margin-top:12px;font-size:13px;color:var(--ac);text-decoration:none}.sc{max-height:92vh;overflow:auto}.st{font-size:11px;font-weight:600;color:var(--ac);margin-bottom:6px}
+#mc .list{display:flex;flex-direction:column;gap:18px;max-height:70vh;overflow:auto}
+body.emb{padding:0;background:#fff}body.emb .app{height:100vh;border-radius:0;border:0;box-shadow:none}
+.pb{text-align:center;font-size:11px;color:var(--mu);padding:0 0 14px}.pb b{color:#3b3d8f}
+@media(max-width:600px){body{padding:0}.app{height:100vh;border-radius:0;border:0}.m{max-width:90%}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="bot" viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="#a5a6f6"/><circle cx="100" cy="100" r="92" fill="none" stroke="#8b8cf0" stroke-width="2"/><path d="M100 46c-24 0-42 18-42 42 0 32 42 66 42 66s42-34 42-66c0-24-18-42-42-42z" fill="#fff" opacity=".95"/><path d="M74 100h14l8-18 10 34 9-22 6 6h13" fill="none" stroke="#3b3d8f" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/></symbol></defs></svg>
+<div class="app"><div class="hd"><div class="av" id="avwrap" style="position:relative"><svg width="44" height="44" id="avsvg"><use href="#bot"/></svg><i id="dot" style="position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:#22c55e;border:2px solid #fff"></i></div><div><h2 id="nm"></h2><small id="sb"></small></div><div class="sp"></div><span id="hdlinks"></span></div>
+<div class="kb" id="kb" style="display:none"></div><div id="log"></div><div class="ch" id="ch"></div>
+<form id="f"><input id="q" placeholder="Type your message…" autocomplete="off"><button>Send</button></form><div class="pb">Powered by <b>DeskMind AI</b></div></div>
+<div id="ks" class="ov"><div class="sc"><h3>Gemini API key</h3><p>Free key: aistudio.google.com/apikey. Saved only in this browser.</p><input id="kin" type="password" placeholder="Paste API key"><input id="kmo" placeholder="Model (optional, e.g. gemini-2.5-flash-lite)" style="margin-top:10px"><button class="go" id="ksave" type="button">Save key</button></div></div><div id="st" class="ov"><div class="sc"><h3>Settings</h3><p>Admin tools for this chatbot.</p><div class="menu"><a href="#" id="gear">🔑 Gemini API key</a><a href="#" id="photos">🖼 Doctor photos</a><a href="#" id="mycards">🎫 My appointment cards</a></div></div></div><div id="pp" class="ov"><div class="sc"><h3>Doctor photos</h3><p>Upload real photos. Saved in this browser. Square crop is automatic.</p><button class="bulk" id="bulk" type="button">📁 Bulk upload (name files like ahmed-khan.jpg)</button><div id="pl"></div></div></div><div id="mc" class="ov"><div class="sc"><h3>My appointment cards</h3><p>Saved on this device.</p><div class="list" id="mcl"></div></div></div><div id="sh"><div class="sc" id="sc"></div></div>
+<script>
+const $=i=>document.getElementById(i),biz=new URLSearchParams(location.search).get('biz')==='shop'?'shop':'hospital';
+const _q=new URLSearchParams(location.search);if(_q.get('embed'))document.body.classList.add('emb');
+if(_q.get('c1')){const c1=_q.get('c1'),c2=_q.get('c2')||c1,st=document.createElement('style');
+st.textContent=':root{--ac:'+c1+'}.g{background:linear-gradient(90deg,'+c1+','+c2+')!important}.hd,.m.u,form button,.sc .go,.cd button,#f button{background:linear-gradient(90deg,'+c1+','+c2+')!important}.hd h2{color:#fff!important}.hd small{color:rgba(255,255,255,.85)!important}.pill{color:'+c1+'!important}a{color:'+c1+'}';document.head.appendChild(st)}
+if(_q.get('name')){document.title=_q.get('name');window.__CN=_q.get('name')}
+if(_q.get('icon')){document.getElementById('avwrap').innerHTML='<img src="'+_q.get('icon')+'" style="width:44px;height:44px;border-radius:14px;object-fit:cover"><i style="position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;background:#22c55e;border:2px solid #fff"></i>'}
+if(_q.get('embed')){document.getElementById('hdlinks').innerHTML='<a href="#" id="setb" title="Settings" style="font-size:20px;line-height:1;opacity:.8">⚙</a>'}
+else{document.getElementById('hdlinks').innerHTML='<a href="#" id="setb" title="Settings" style="font-size:22px;line-height:1">⚙</a>&nbsp;&nbsp;<a href="index.html">← Projects</a>'}
+const B={hospital:{n:'Meridian Health',s:'AI Care Assistant · online',h:["Hi, welcome to "+ (window.__CN||'the clinic') +".","I can find a doctor, check prices, check insurance, or book your appointment. What do you need?"],c:['I need a dentist','Do you accept my insurance?']},
+shop:{n:'Luma Home',s:'AI Shopping Assistant · online',h:["Hi, welcome to "+ (window.__CN||'our store') +".","I can help you find furniture, track an order, or answer shipping and returns. What do you need?"],c:['Grey sofa under $900','Track order ORD-1042','What is your return policy?','Pet friendly rug ideas']}}[biz];
+$('nm').textContent=_q.get('name')||B.n;$('sb').textContent=B.s;document.title=B.n+' · AI Chat';
+
+let hist=[];const log=$('log');
+const scroll=()=>log.scrollTop=log.scrollHeight;
+function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;log.appendChild(d);scroll();return d}
+function cards(cs){const w=document.createElement('div');w.className='car';cs.forEach(c=>{const d=document.createElement('div');d.className='cd';
+ if(c.type==='doctor'){d.innerHTML=`<div class="im"><img alt="" src="${PH()[c.id]||'https://api.dicebear.com/9.x/notionists/svg?seed='+encodeURIComponent(c.name)+'&backgroundColor=e9ecff'}" onerror="this.replaceWith(document.createTextNode('${c.name.split(' ').pop()[0]}'))"></div><h4>${c.name}</h4><div class="d">${c.dept}</div><div class="x">${c.exp} yrs · ★ ${c.rating} · $${c.fee}<br>${c.days.join(' · ')}</div><button>Select doctor</button>`;d.onclick=()=>pickDoc(c,d)}
+ else{d.innerHTML=`<div class="im" style="border-radius:22px">${c.emoji}</div><h4>${c.name}</h4><div class="d">$${c.price}</div><div class="x">${c.cat} · ★ ${c.rating}<br>${c.stock?c.stock+' in stock':'Out of stock'}</div><button>Ask about this</button>`;d.onclick=()=>send('Tell me more about the '+c.name+' ('+c.id+')')}
+ w.appendChild(d)});log.appendChild(w);scroll()}
+async function send(t){t=t.trim();if(!t)return;if(!KEY()){$('ks').classList.add('on');return}$('ch').style.display='none';add(t,'u');hist.push({role:'user',text:t});$('q').value='';
+ const ty=add('','b');ty.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';
+ try{const j=await ask();ty.remove();add(j.reply,'b');hist.push({role:'model',text:j.reply});if(j.cards&&j.cards.length)cards(j.cards);
+  /* token usage hidden from client view */
+ }catch(e){ty.textContent=e.message==='nokey'?'Add your Gemini API key first (top right).':'Error: '+e.message}}
+$('f').onsubmit=e=>{e.preventDefault();send($('q').value)};
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function typingBubble(){const d=document.createElement('div');d.className='m b';d.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';log.appendChild(d);scroll();return d}
+async function typeInto(el,text,speed){el.textContent='';for(let i=0;i<text.length;i++){el.textContent+=text[i];if(i%3===0)scroll();await sleep(speed)}scroll()}
+async function greet(){for(const line of B.h){const d=typingBubble();await sleep(450+Math.random()*250);d.innerHTML='';await typeInto(d,line,14)}
+ await sleep(350);B.c.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.className='chip-in';b.style.animationDelay=(i*220)+'ms';b.onclick=()=>send(t);$('ch').appendChild(b)})}
+greet();
+if(_q.get('embed'))document.addEventListener('keydown',e=>{if(e.key==='Escape')window.parent.postMessage('dm-close','*')});
+
+/* engine: runs fully in browser */
+const KEY=()=>{try{return localStorage.getItem('gkey')||''}catch(_){return ''}};
+$('gear').onclick=e=>{e.preventDefault();$('kin').value=KEY();try{$('kmo').value=localStorage.getItem('gmodel')||''}catch(_){}$('ks').classList.add('on')};
+$('ksave').onclick=()=>{try{localStorage.setItem('gkey',$('kin').value.trim());localStorage.setItem('gmodel',$('kmo').value.trim())}catch(_){}$('ks').classList.remove('on')};
+const STOP=new Set('a an the is are am i me my we you your to of for in on at and or do does can could would please any with have has need want looking find show tell about what which who how'.split(' '));
+const SYN={couch:'sofa',dentist:'dental dentistry',cost:'price fee',cheap:'price',refund:'return',deliver:'shipping delivery',ship:'shipping'};
+const tok=x=>(x.toLowerCase().match(/[a-z0-9][a-z0-9\-]*/g)||[]).map(w=>w.length>3&&w.endsWith('s')?w.slice(0,-1):w).filter(w=>!STOP.has(w));
+const SYS={hospital:"You are the AI care assistant of MediCare Plus hospital. Answer ONLY from CONTEXT. Be warm, brief (max 3 sentences). If the user wants a doctor, put up to 6 matching doctor ids in show. Never invent doctors, prices or slots. If unsure, say you will connect them to the front desk. Never give medical diagnosis.",shop:"You are the AI shopping assistant of Luma Home furniture store. Answer ONLY from CONTEXT. Be friendly, brief (max 3 sentences). When recommending products put up to 6 product ids in show. For order questions use the order record only. Never invent products, prices or policies."};
+let DOCS,IDX,DF,AVG,FULL,BY;
+function init(){DOCS=window.DATA;IDX=DOCS.map(d=>{const t=tok(d.text+' '+(d.name||''));const tf={};t.forEach(w=>tf[w]=(tf[w]||0)+1);return{tf,len:t.length}});DF={};IDX.forEach(x=>Object.keys(x.tf).forEach(w=>DF[w]=(DF[w]||0)+1));AVG=IDX.reduce((a,x)=>a+x.len,0)/IDX.length;FULL=Math.round(DOCS.reduce((a,d)=>a+d.text.length,0)/4);BY=Object.fromEntries(DOCS.map(d=>[d.id,d]));
+ $('kb').innerHTML=`<span>📚 Knowledge base: <b>${DOCS.length} records</b></span><span>·</span><span><b>${FULL.toLocaleString()}</b> tokens</span><span>·</span><span>Only relevant records reach the AI</span>`}
+function search(q,k=7){let qt=tok(q);qt=qt.concat(...qt.map(w=>tok(SYN[w]||'')));const N=DOCS.length;
+ return DOCS.map((d,i)=>{const x=IDX[i];let s=0;for(const w of new Set(qt)){const f=x.tf[w];if(!f)continue;const n=DF[w];s+=Math.log(1+(N-n+.5)/(n+.5))*f*2.5/(f+1.5*(.25+.75*x.len/AVG))}return{d,s}}).filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,k).map(r=>r.d)}
+async function ask(){const hits=search(hist.filter(m=>m.role==='user').slice(-2).map(m=>m.text).join(' '));const ctx=hits.map(d=>`[${d.id}] ${d.text}`).join('\n');
+ const contents=hist.slice(-6).map((m,i,a)=>({role:m.role==='user'?'user':'model',parts:[{text:i===a.length-1&&m.role==='user'?`CONTEXT:\n${ctx}\n\nUSER: ${m.text}`:m.text}]}));
+ const body=JSON.stringify({systemInstruction:{parts:[{text:SYS[biz]+' Reply as JSON: {"reply":string,"show":[ids]}'}]},contents,generationConfig:{temperature:.3,responseMimeType:'application/json'}});
+ let j,r,err;const um=(()=>{try{return localStorage.getItem('gmodel')||''}catch(_){return ''}})();for(const m of [um,'gemini-flash-lite-latest','gemini-2.5-flash-lite','gemini-flash-latest','gemini-3.6-flash'].filter(Boolean)){r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+m+':generateContent?key='+KEY(),{method:'POST',headers:{'content-type':'application/json'},body});j=await r.json();if(r.ok)break;err=(j.error&&j.error.message)||'API error';if(/api key|permission|billing/i.test(err))break}
+ if(!r.ok)throw new Error(err);
+ const raw=j.candidates[0].content.parts[0].text;let p;try{p=JSON.parse(raw)}catch(_){p={reply:raw,show:[]}}
+ const cards=(p.show||[]).map(id=>BY[id]).filter(d=>d&&/doctor|product/.test(d.type)).slice(0,6).map(({text,...c})=>c);const sent=(j.usageMetadata&&j.usageMetadata.promptTokenCount)||0;
+ return{reply:p.reply,cards,usage:{sent,full:FULL,saved:Math.max(0,Math.round(100-sent/(FULL+300)*100))}}}
+const sc=document.createElement('script');sc.src='data-'+biz+'.js';sc.onload=init;document.head.appendChild(sc);
+/* doctor photos */
+const PH=()=>{try{return JSON.parse(localStorage.getItem('dphotos')||'{}')}catch(_){return{}}};
+const savePH=o=>{try{localStorage.setItem('dphotos',JSON.stringify(o))}catch(e){alert('Storage full. Use smaller photos.')}};
+const shrink=f=>new Promise(res=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=c.height=240;const m=Math.min(i.width,i.height);c.getContext('2d').drawImage(i,(i.width-m)/2,(i.height-m)*.2,m,m,0,0,240,240);res(c.toDataURL('image/jpeg',.85))};i.src=r.result};r.readAsDataURL(f)});
+const norm=t=>t.toLowerCase().replace(/\.[a-z]+$/,'').replace(/[^a-z0-9]/g,'').replace(/^dr/,'');
+const pick1=(accept,multi)=>new Promise(res=>{const i=document.createElement('input');i.type='file';i.accept=accept;i.multiple=!!multi;i.onchange=()=>res([...i.files]);i.click()});
+function photoRows(){const l=$('pl');l.innerHTML='';const P=PH();DOCS.filter(d=>d.type==='doctor').forEach(d=>{const r=document.createElement('div');r.className='pr';
+ r.innerHTML=`<img alt="" src="${P[d.id]||'https://api.dicebear.com/9.x/notionists/svg?seed='+encodeURIComponent(d.name)+'&backgroundColor=e9ecff'}"><div class="sp"><b>${d.name}</b><small>${d.dept}</small></div><button>Upload</button><button>Reset</button>`;
+ r.children[2].onclick=async()=>{const f=(await pick1('image/*'))[0];if(!f)return;const o=PH();o[d.id]=await shrink(f);savePH(o);photoRows()};
+ r.children[3].onclick=()=>{const o=PH();delete o[d.id];savePH(o);photoRows()};l.appendChild(r)})}
+$('bulk').onclick=async()=>{const fs=await pick1('image/*',true);const o=PH();let n=0;for(const f of fs){const k=norm(f.name);const d=DOCS.find(d=>d.type==='doctor'&&(k===norm(d.name)||k.includes(norm(d.name))));if(d){o[d.id]=await shrink(f);n++}}savePH(o);photoRows();alert(n+' of '+fs.length+' photos matched.')};
+$('photos').onclick=e=>{e.preventDefault();if(!DOCS)return;photoRows();$('pp').classList.add('on')};
+$('pp').onclick=e=>{if(e.target.id==='pp')$('pp').classList.remove('on')};
+if(biz!=='hospital'){$('photos').style.display='none';$('mycards').style.display='none'}
+$('setb').onclick=e=>{e.preventDefault();$('st').classList.add('on')};$('st').onclick=e=>{if(e.target.id==='st')$('st').classList.remove('on')};['gear','photos','mycards'].forEach(i=>$(i).addEventListener('click',()=>$('st').classList.remove('on')));
+/* booking flow */
+let pick={};
+function pickDoc(c,d){[...d.parentNode.children].forEach(x=>x.classList.remove('sel'));d.classList.add('sel');add("I'd like "+c.name,'u');hist.push({role:'user',text:'I choose '+c.name+' ('+c.dept+')'});
+ const m=add('Great choice! '+c.name+' has '+c.exp+' years of experience. Pick a time that suits you.','b');hist.push({role:'model',text:m.textContent});setTimeout(()=>sheet(c),450)}
+function sheet(c){pick={c,d:null,t:null,r:'General check-up',n:'',p:'',pay:'card',step:1};step()}
+const PAY=[['card','💳 Card'],['wallet','📱 Wallet'],['ins','🛡 Insurance'],['clinic','🏥 Pay at hospital']],PL={card:'Card',wallet:'Wallet',ins:'Insurance'};
+function chips(id,arr,cur,fn){const w=$(id);arr.forEach(a=>{const b=document.createElement('button');b.type='button';b.textContent=a[1];if(a[0]===cur)b.classList.add('on');b.onclick=()=>{[...w.children].forEach(y=>y.classList.remove('on'));b.classList.add('on');fn(a[0],a)};w.appendChild(b)})}
+function step(){const c=pick.c,S=$('sc');
+ if(pick.step===1){const days=[],D=new Date();for(let i=1;i<=14&&days.length<6;i++){const x=new Date(D);x.setDate(D.getDate()+i);const w=x.toLocaleDateString('en',{weekday:'short'});if(c.days.includes(w))days.push([x.toISOString().slice(0,10),x.toLocaleDateString('en',{weekday:'short',day:'numeric',month:'short'})])}
+  S.innerHTML=`<div class="st">STEP 1 OF 2 · DETAILS</div><h3>Book ${c.name}</h3><p>${c.dept} · $${c.fee} consultation</p><label>Date</label><div class="cl" id="dl"></div><label>Time</label><div class="cl" id="tl"></div><label>Reason for visit</label><div class="cl" id="rl"></div><label>Patient name</label><input id="pn" placeholder="Full name"><label>Phone</label><input id="ph" type="tel" placeholder="+1 555 000 0000"><button class="go" id="go" type="button" disabled>Continue to payment</button>`;
+  chips('dl',days,pick.d&&pick.d[0],(k,a)=>{pick.d=a;chk()});chips('tl',c.times.map(t=>[t,t]),pick.t,k=>{pick.t=k;chk()});chips('rl',['General check-up','Pain / discomfort','Follow-up','Other'].map(t=>[t,t]),pick.r,k=>pick.r=k);
+  $('pn').value=pick.n;$('ph').value=pick.p;$('pn').oninput=$('ph').oninput=()=>{pick.n=$('pn').value.trim();pick.p=$('ph').value.trim();chk()};
+  $('go').onclick=()=>{pick.step=2;step()};chk()}
+ else{S.innerHTML=`<div class="st">STEP 2 OF 2 · PAYMENT</div><h3>Review & pay</h3><div class="sum"><div><span>Doctor</span>${c.name}</div><div><span>When</span>${pick.d[1]} · ${pick.t}</div><div><span>Patient</span>${pick.n.replace(/</g,'')}</div><div class="t"><span>Total</span>$${c.fee}</div></div><label>Payment method</label><div class="cl" id="pm"></div><button class="go" id="go" type="button"></button><a href="#" class="bk" id="bk">← Back</a>`;
+  const lab=()=>$('go').textContent=pick.pay==='clinic'?'Confirm booking':'Pay $'+c.fee;chips('pm',PAY,pick.pay,k=>{pick.pay=k;lab()});lab();
+  $('bk').onclick=e=>{e.preventDefault();pick.step=1;step()};$('go').onclick=()=>{$('go').disabled=true;$('go').textContent='Processing…';setTimeout(finish,pick.pay==='clinic'?400:1400)}}
+ $('sh').classList.add('on')}
+const chk=()=>{const g=$('go');if(g&&pick.step===1)g.disabled=!(pick.d&&pick.t&&pick.n&&pick.p.length>5)};
+$('sh').onclick=e=>{if(e.target.id==='sh')$('sh').classList.remove('on')};
+$('mc').onclick=e=>{if(e.target.id==='mc')$('mc').classList.remove('on')};
+async function finish(){$('sh').classList.remove('on');const c=pick.c,paid=pick.pay!=='clinic';
+ const b={ref:'MC-'+Math.floor(1000+Math.random()*9000),token:c.dept[0]+'-'+Math.floor(10+Math.random()*89),doc:c.name,dept:c.dept,date:pick.d[1],iso:pick.d[0],time:pick.t,patient:pick.n,phone:pick.p,reason:pick.r,fee:c.fee,paid,payLabel:PL[pick.pay]||''};
+ try{const a=JSON.parse(localStorage.getItem('bookings')||'[]');a.push(b);localStorage.setItem('bookings',JSON.stringify(a))}catch(_){}
+ const msg=paid?`Payment of $${c.fee} received. Your appointment is confirmed 🎉`:'Your appointment is confirmed. Please pay at the reception.';const m=add(msg,'b');
+ hist.push({role:'user',text:`I booked ${b.doc} on ${b.date} at ${b.time}.`},{role:'model',text:msg+' Reference '+b.ref});
+ await showCard(b,log);const n=add('Save this card. Show it at reception when you arrive. Anything else I can help with?','b');scroll()}
+async function showCard(b,host){await document.fonts.load('600 20px Poppins');await document.fonts.load('400 20px Poppins');await document.fonts.load('500 20px Poppins');
+ const w=document.createElement('div');w.className='tkc';const cv=drawCard(b);w.appendChild(cv);const bt=document.createElement('div');bt.className='bt';bt.innerHTML='<button>⬇ Save card</button><button>📅 Add to calendar</button>';w.appendChild(bt);
+ bt.children[0].onclick=()=>cv.toBlob(x=>dl(x,b.ref+'.png'));bt.children[1].onclick=()=>dl(new Blob([ics(b)],{type:'text/calendar'}),b.ref+'.ics');host.appendChild(w);if(host===log)scroll()}
+function dl(blob,n){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=n;a.click()}
+function ics(b){const d=b.iso.replace(/-/g,'')+'T'+b.time.replace(':','')+'00';const e=new Date(new Date(b.iso+'T'+b.time+':00').getTime()+18e5),z=n=>String(n).padStart(2,'0');const E=e.getFullYear()+z(e.getMonth()+1)+z(e.getDate())+'T'+z(e.getHours())+z(e.getMinutes())+'00';
+ return`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${b.doc} - MediCare Plus\nDTSTART:${d}\nDTEND:${E}\nDESCRIPTION:Ref ${b.ref} Token ${b.token}\nEND:VEVENT\nEND:VCALENDAR`}
+const C39=Object.fromEntries('0:nnnwwnwnn,1:wnnwnnnnw,2:nnwwnnnnw,3:wnwwnnnnn,4:nnnwwnnnw,5:wnnwwnnnn,6:nnwwwnnnn,7:nnnwnnwnw,8:wnnwnnwnn,9:nnwwnnwnn,M:wnwnnnnwn,C:wnwnnwnnn,-:nwnnnnwnw,*:nwnnwnwnn'.split(',').map(x=>x.split(':')));
+function code39(x,s,X,Y,w,h){const t='*'+s+'*',u=w/(16*t.length);let p=X;x.fillStyle='#0f1222';for(const ch of t){const q=C39[ch];for(let i=0;i<9;i++){const wd=(q[i]==='w'?3:1)*u;if(i%2===0)x.fillRect(p,Y,wd,h);p+=wd}p+=u}}
+function drawCard(b){const W=720,H=1080,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.fillStyle='#eef1fb';x.fillRect(0,0,W,H);x.beginPath();x.roundRect(30,30,660,1020,44);x.fillStyle='#fff';x.fill();
+ x.save();x.beginPath();x.roundRect(30,30,660,1020,44);x.clip();const g=x.createLinearGradient(30,0,690,0);g.addColorStop(0,'#4285f4');g.addColorStop(1,'#8b5cf6');x.fillStyle=g;x.fillRect(30,30,660,250);x.restore();
+ x.beginPath();x.arc(360,118,44,0,7);x.fillStyle='#fff';x.fill();x.strokeStyle='#22a565';x.lineWidth=9;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(340,118);x.lineTo(356,136);x.lineTo(384,102);x.stroke();
+ x.textAlign='center';x.fillStyle='#fff';x.font='600 34px Poppins';x.fillText('Appointment Confirmed',360,224);x.font='400 20px Poppins';x.fillText('MediCare Plus',360,258);
+ x.fillStyle='#0f1222';x.font='600 36px Poppins';x.fillText(b.doc,360,350);x.fillStyle='#5b5bf0';x.font='500 22px Poppins';x.fillText(b.dept,360,388);
+ [['Date',b.date],['Time',b.time],['Patient',b.patient],['Reason',b.reason],['Fee','$'+b.fee],['Payment',b.paid?'Paid · '+b.payLabel:'Pay at reception']].forEach((r,i)=>{const y=450+i*62;x.textAlign='left';x.fillStyle='#7a80a0';x.font='400 22px Poppins';x.fillText(r[0],80,y);x.textAlign='right';x.fillStyle='#0f1222';x.font='500 24px Poppins';x.fillText(r[1],640,y)});
+ const dy=850;x.setLineDash([10,10]);x.strokeStyle='#d5d9ee';x.lineWidth=3;x.beginPath();x.moveTo(70,dy);x.lineTo(650,dy);x.stroke();x.setLineDash([]);x.fillStyle='#eef1fb';x.beginPath();x.arc(30,dy,26,0,7);x.fill();x.beginPath();x.arc(690,dy,26,0,7);x.fill();
+ code39(x,b.ref,150,885,420,72);x.textAlign='center';x.fillStyle='#0f1222';x.font='600 26px Poppins';x.fillText('Token '+b.token+'  ·  Ref '+b.ref,360,1005);x.fillStyle='#7a80a0';x.font='400 18px Poppins';x.fillText('Show this card at reception · Arrive 10 min early',360,1034);return c}
+$('mycards').onclick=async e=>{e.preventDefault();const l=$('mcl');l.innerHTML='';let a=[];try{a=JSON.parse(localStorage.getItem('bookings')||'[]')}catch(_){}
+ if(!a.length)l.innerHTML='<p>No cards yet.</p>';for(const b of a.slice().reverse())await showCard(b,l);$('mc').classList.add('on')};
+</script></body></html>
